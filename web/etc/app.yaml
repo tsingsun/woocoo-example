@@ -26,10 +26,11 @@ web:
       - default:
           middlewares:
             - otel:
-                traceExporterEndpoint: stdout
-                metricExporterEndpoint:
             - accessLog:
                 format: id,remoteIp,host,method,uri,userAgent,status,error,latency,bytesIn,bytesOut,header:Cache-Control
                 exclude:
                   - IntrospectionQuery
             - recovery:
+otel:
+  traceExporterEndpoint: "http://localhost:9411/api/v2/spans"
+  metricExporterEndpoint: prometheus

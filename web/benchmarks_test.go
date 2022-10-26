@@ -43,14 +43,14 @@ web:
 	cfg := conf.NewFromBytes([]byte(cfgstr))
 	cfg.SetBaseDir(basedir)
 	log.NewBuiltIn()
-	httpSvr := web.New(web.Configuration(cfg.Sub("web")))
+	httpSvr := web.New(web.WithConfiguration(cfg.Sub("web")))
 	router := httpSvr.Router().Engine
 	router.GET("/", func(c *gin.Context) {
 		c.String(200, "hello world")
 	})
 
 	runRequest(B, router, "GET", "/")
-	log.Global().Sync()
+	log.Global().Logger().Sync()
 }
 
 type mockWriter struct {

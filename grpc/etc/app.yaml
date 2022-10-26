@@ -1,3 +1,4 @@
+appName: grpc
 development: true
 log:
   cores:
@@ -11,22 +12,17 @@ log:
         - stderr
 grpc:
   server:
-    listen: "20000"
-    location: /woocoo/service
+    addr: :20000
+    namespace: /woocoo/service
     version: "1.0"
     engine:
-      - unaryinterceptors:
-          - trace:
-          - logger:
+      - unaryInterceptors:
+          - otel:
+          - accessLog:
           - recovery:
-          - prometheus:
-          - auth:
   registry:
     scheme: etcd
     ttl: 60s
-    tls:
-      sslCertificate: ""
-      sslCertificateKey: ""
     etcd:
       endpoints:
         - :2379
@@ -34,3 +30,6 @@ grpc:
       dial-keep-alive-time: 30s
   prometheus:
     addr: 0.0.0.0:2222
+otel:
+  traceExporterEndpoint: "http://localhost:9411/api/v2/spans"
+  metricExporterEndpoint: prometheus
