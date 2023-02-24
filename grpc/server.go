@@ -33,7 +33,7 @@ func main() {
 
 	srv := grpcx.New(
 		grpcx.WithConfiguration(app.AppConfiguration().Sub("grpc")),
-		grpcx.UseLogger(),
+		grpcx.WithGrpcLogger(),
 	)
 	api.RegisterHelloServiceServer(srv.Engine(), &server{})
 	app.RegisterServer(srv)

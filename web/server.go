@@ -3,12 +3,12 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/tsingsun/woocoo"
-	"github.com/tsingsun/woocoo/contrib/opentelemetry"
-	"github.com/tsingsun/woocoo/contrib/opentelemetry/otelweb"
+	"github.com/tsingsun/woocoo/contrib/gql"
+	"github.com/tsingsun/woocoo/contrib/telemetry"
+	"github.com/tsingsun/woocoo/contrib/telemetry/otelweb"
 	"github.com/tsingsun/woocoo/pkg/conf"
 	"github.com/tsingsun/woocoo/pkg/log"
 	"github.com/tsingsun/woocoo/web"
-	"github.com/tsingsun/woocoo/web/handler/gql"
 	"go.opentelemetry.io/otel/exporters/prometheus"
 	"go.opentelemetry.io/otel/exporters/zipkin"
 	"go.opentelemetry.io/otel/sdk/metric"
@@ -30,9 +30,9 @@ type User struct {
 func main() {
 	app := woocoo.New()
 	otelCnf := app.AppConfiguration().Sub("otel")
-	opentelemetry.NewConfig(otelCnf,
-		opentelemetry.WithTracerProviderOptions(zipkinTracer(otelCnf)...),
-		opentelemetry.WithMeterProviderOptions(prometheusProvider(otelCnf)...),
+	telemetry.NewConfig(otelCnf,
+		telemetry.WithTracerProviderOptions(zipkinTracer(otelCnf)...),
+		telemetry.WithMeterProviderOptions(prometheusProvider(otelCnf)...),
 	)
 
 	httpSvr := web.New(web.WithConfiguration(app.AppConfiguration().Sub("web")),
