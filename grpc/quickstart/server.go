@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/tsingsun/woocoo"
 	"github.com/tsingsun/woocoo-example/funcs"
-	"github.com/tsingsun/woocoo-example/grpc/api"
+	"github.com/tsingsun/woocoo-example/grpc/quickstart/api"
 	"github.com/tsingsun/woocoo/contrib/telemetry"
 	"github.com/tsingsun/woocoo/pkg/conf"
 	"github.com/tsingsun/woocoo/rpc/grpcx"

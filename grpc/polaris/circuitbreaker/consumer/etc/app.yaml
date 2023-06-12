@@ -1,0 +1,33 @@
+grpc:
+  registry:
+    ref: registry
+    scheme: polaris
+  client:
+    target:
+      serviceName: hellopb.HelloService
+      metadata:
+        version: "1.0"
+        route: true
+        dst_location: amoy
+        src_country: CN
+        circuitBreaker: true
+    dialOption:
+      - tls:
+      - block:
+registry:
+  scheme: polaris
+  ttl: 10s # 设置心跳健康检查ttl，单位为s，不填默认为5s，TTL的取值范围为 (0s, 60s]
+  polaris:
+    global:
+      serverConnector:
+        addresses:
+          - 127.0.0.1:8091
+      statReporter:
+        enable: true
+        chain:
+          - prometheus
+        #        - pushgateway
+        plugin:
+          prometheus:
+            type: pull
+            metricPort: 0
