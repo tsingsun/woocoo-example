@@ -21,19 +21,26 @@ func main() {
 	defer conn.Close()
 	hello := hellopb.NewHelloServiceClient(conn)
 	http.HandleFunc("/echo", func(rw http.ResponseWriter, r *http.Request) {
+		haserr := false
 		for i := 0; i < 10; i++ {
 			resp, err := hello.SayHello(r.Context(), &hellopb.HelloRequest{Greeting: "woocoo"})
 			if err != nil {
+				haserr = true
 				log.Printf("[error] fail to say, err is %v", err)
-				rw.WriteHeader(http.StatusInternalServerError)
 				_, _ = rw.Write([]byte(fmt.Sprintf("[error] fail to say, err is %v", err)))
 				_, _ = rw.Write([]byte(err.Error()))
 				_, _ = rw.Write([]byte("\n"))
 				continue
+			} else {
+				_, _ = rw.Write([]byte(resp.Reply))
+				_, _ = rw.Write([]byte("\n"))
 			}
+
+		}
+		if haserr {
+			rw.WriteHeader(http.StatusInternalServerError)
+		} else {
 			rw.WriteHeader(http.StatusOK)
-			_, _ = rw.Write([]byte(resp.Reply))
-			_, _ = rw.Write([]byte("\n"))
 		}
 	})
 

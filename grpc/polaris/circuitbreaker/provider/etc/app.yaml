@@ -9,26 +9,14 @@ service:
   server:
     addr: 127.0.0.1:0
     version: "1.0"
-    engine:
-      - unaryInterceptors:
-          - recovery:
-    registryMeta:
-      location: default
+
+  engine:
+    - unaryInterceptors:
+        - recovery:
+#        - polarisRateLimit:
   registry:
     ref: registry
     scheme: polaris
-  client:
-    target:
-      metadata:
-        version: "1.0"
-        route: true
-        dst_location: amoy
-        src_country: CN
-        circuitBreaker: true
-    dialOption:
-      - tls:
-      - block:
-      - timeout: 10s
 
 registry:
   scheme: polaris
@@ -42,7 +30,6 @@ registry:
         enable: true
         chain:
           - prometheus
-        #        - pushgateway
         plugin:
           prometheus:
             type: pull
